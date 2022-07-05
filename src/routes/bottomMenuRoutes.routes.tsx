@@ -2,9 +2,6 @@ import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Ionicons  from '@expo/vector-icons/Ionicons';
 
-import BagHandle from '../assets/bag-handle.svg';
-import BagHandleOutline from '../assets/bag-handle.svg';
-
 import { Home } from '../screens/Home';
 import { useTheme } from 'styled-components';
 import { Avatar } from '../components/Avatar';

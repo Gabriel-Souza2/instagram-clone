@@ -5,6 +5,8 @@ export default {
         background_primary: '#000000',
         border_color: '#1b1b1b',
         text: '#fff',
+        text_link_comments: '#808080',
+        text_time_post: '#6e6e6e',
     },
     
     fonts: {

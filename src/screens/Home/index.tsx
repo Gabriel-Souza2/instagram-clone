@@ -15,6 +15,7 @@ import Feather from '@expo/vector-icons/Feather';
 import { useTheme } from 'styled-components';
 import { Story } from '../../components/Story';
 import { Stories } from '../../components/Stories';
+import { Post } from '../../components/Post';
 
 export function Home() {
     const theme = useTheme();
@@ -55,7 +56,7 @@ export function Home() {
                 ListHeaderComponent={<Stories />}
                 data={[1,2,3,4,5]}
                 keyExtractor={(item, index) => `${index}`}
-                renderItem={() => <></>}
+                renderItem={() => <Post aspectRatio={0.834} />}
             />
                 
         </Container>
