@@ -7,11 +7,14 @@ import {
     LogoWrapper,
     Logo,
     HeaderWrapper,
-    ActionButton
+    ActionButton,
+    Content,
+    Storys
 } from './styles';
 
 import Feather from '@expo/vector-icons/Feather';
 import { useTheme } from 'styled-components';
+import { Story } from '../../components/Story';
 
 export function Home() {
     const theme = useTheme();
@@ -48,6 +51,13 @@ export function Home() {
                     </ToolBar>
                 </HeaderWrapper>
             </Header>
+            <Content>
+                <Storys 
+                    data={[1,2,3,4,5,6,7,8,9,10]}
+                    keyExtractor={({ item, index }) => index}
+                    renderItem={(item) => <Story />}
+                />
+            </Content>
         </Container>
     );
 }

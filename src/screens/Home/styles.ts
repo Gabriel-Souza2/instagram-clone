@@ -41,3 +41,18 @@ export const ToolBar = styled.View`
 export const ActionButton = styled(BorderlessButton)`
     margin-right: 20px;
 `
+
+export const Content = styled.ScrollView.attrs({
+    showsVerticalScrollIndicator: false
+})`
+    flex: 1;
+`;
+
+export const Storys = styled.FlatList.attrs({
+    showsHorizontalIndicator: false,
+    horizontal: true
+})`
+    padding: 10px;
+    border-bottom-width: 1px;
+    border-bottom-color: ${({ theme }) => theme.colors.border_color};
+`;

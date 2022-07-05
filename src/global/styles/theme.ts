@@ -3,7 +3,7 @@ import 'styled-components';
 export default {
     colors: {
         background_primary: '#000000',
-        border_colors: '#363636',
+        border_color: '#1b1b1b',
         text: '#fff',
     },
     
