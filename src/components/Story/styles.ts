@@ -18,22 +18,6 @@ export const BorderGradient = styled(LinearGradient).attrs({
     border-radius: 100px;
 `;
 
-export const AvatarWrapper = styled.View`
-
-    border-radius: 100px;
-    background-color: black;
-    padding: 3px;
-
-    justify-content: center;
-    align-items: center;
-`;
-
-export const Avatar = styled.Image`
-    width: 70px;
-    height: 70px;
-    border-radius: 35px;
-`;
-
 export const Name = styled.Text`
     color: ${({ theme }) => theme.colors.text};
     font-family: ${({ theme }) => theme.fonts.regular};

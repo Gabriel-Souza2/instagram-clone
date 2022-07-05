@@ -30,7 +30,7 @@ export const LogoWrapper = styled.View`
 export const Logo = styled.Text`
     color: ${({ theme }) => theme.colors.text};
     font-family: ${({ theme }) => theme.fonts.medium};
-    font-size: ${RFValue(20)}px;
+    font-size: ${RFValue(22)}px;
     font-weight: bold;
 `;
 
@@ -42,17 +42,8 @@ export const ActionButton = styled(BorderlessButton)`
     margin-right: 20px;
 `
 
-export const Content = styled.ScrollView.attrs({
+export const Content = styled.FlatList.attrs({
     showsVerticalScrollIndicator: false
 })`
     flex: 1;
-`;
-
-export const Storys = styled.FlatList.attrs({
-    showsHorizontalIndicator: false,
-    horizontal: true
-})`
-    padding: 10px;
-    border-bottom-width: 1px;
-    border-bottom-color: ${({ theme }) => theme.colors.border_color};
 `;
