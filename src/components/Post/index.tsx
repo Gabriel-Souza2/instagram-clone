@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useRef, useState } from 'react';
 
 import {
     Container,
@@ -6,10 +6,13 @@ import {
     AvatarWrapper,
     Name,
     Icons,
+    Images,
     Img,
     Actions,
     CommentsIcon,
     ActionsLeft,
+    ImgIndex,
+    ActionsRight,
     Likes,
     Message,
     WhoLiked,
@@ -18,15 +21,44 @@ import {
     WhoPostedName,
     Description,
     Comments,
-    TimePost
+    TimePost,
+    IndexesImages
 } from './styles';
 import { Story } from '../Story';
 
+import { PostDto } from "../../dtos/PostDto";
+import { ViewToken } from 'react-native';
+
 interface PostProps {
-    aspectRatio: number;
+    data: PostDto;
 }
 
-export function Post({ aspectRatio }: PostProps) {
+
+interface ChangeImageProps {
+    viewableItems: ViewToken[];
+    changed: ViewToken[];
+}
+
+
+export function Post({ data }: PostProps) {
+
+    function Index() {
+        const indexes = data.images.map((_, index) => {
+            let size : "normal" | "small" | "tiny" = "normal";
+
+            if(index === 5) {
+                size = "small"
+            }
+
+            if(index >= 6) {
+                size = "tiny"
+            }
+            return <ImgIndex key={index} size={size} />
+        })
+
+        return <>{indexes}</>
+    }
+
     return (
         <Container>
             <Header>
@@ -39,9 +71,13 @@ export function Post({ aspectRatio }: PostProps) {
                 </AvatarWrapper>
                 <Icons name="md-ellipsis-vertical" size={24}/>
             </Header>
-            <Img 
-                source={{uri: "https://rocketseat-cdn.s3-sa-east-1.amazonaws.com/instagram-clone/2.jpeg"}} 
-                aspectRatio={aspectRatio}
+            <Images 
+                data={data.images}
+                keyExtractor={(_,index) => `${data.authorId}-${index}`}
+                renderItem={({ item }) => <Img 
+                    source={{uri: item}} 
+                />}
+                pagingEnabled
             />
             <Actions>
                 <ActionsLeft>
@@ -49,7 +85,14 @@ export function Post({ aspectRatio }: PostProps) {
                     <CommentsIcon name="ios-chatbubble-outline" size={24}/>
                     <Icons name="send-outline" size={24} />
                 </ActionsLeft>
-                <Icons name="bookmark-outline" size={24} />
+                <IndexesImages>
+                    {
+                        data.images.length > 1 ? <Index /> : <></>
+                    }
+                </IndexesImages>
+                <ActionsRight>
+                    <Icons name="bookmark-outline" size={24} />
+                </ActionsRight>
             </Actions>
             <Footer>
                 <Likes>
@@ -62,7 +105,7 @@ export function Post({ aspectRatio }: PostProps) {
                 </Likes>
                 <DescriptionWrapper>
                     <WhoPostedName>Avatar</WhoPostedName>
-                    <Description>Working hard at Rocketseat!</Description>
+                    <Description>{ data.description }</Description>
                 </DescriptionWrapper>
                 <Comments>Ver os 22 comentarios</Comments>
                 <TimePost>Há 3 dias</TimePost>

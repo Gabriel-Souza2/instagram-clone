@@ -1,6 +1,8 @@
+import { FlatList, FlatListProps } from 'react-native';
 import { BorderlessButton } from 'react-native-gesture-handler';
 import { RFValue } from 'react-native-responsive-fontsize';
 import styled from 'styled-components/native';
+import { PostDto } from '../../dtos/PostDto';
 
 export const Container = styled.View`
     flex: 1;
@@ -40,10 +42,14 @@ export const ToolBar = styled.View`
 
 export const ActionButton = styled(BorderlessButton)`
     margin-right: 20px;
-`
+`;
 
-export const Content = styled.FlatList.attrs({
+export const Content = styled(
+     FlatList as new (props: FlatListProps<PostDto>) => FlatList<PostDto>
+).attrs({
     showsVerticalScrollIndicator: false
 })`
     flex: 1;
 `;
+
+

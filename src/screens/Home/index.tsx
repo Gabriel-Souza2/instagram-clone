@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 
 import {
     Container,
@@ -13,12 +13,38 @@ import {
 
 import Feather from '@expo/vector-icons/Feather';
 import { useTheme } from 'styled-components';
-import { Story } from '../../components/Story';
 import { Stories } from '../../components/Stories';
 import { Post } from '../../components/Post';
+import { api } from '../../services/api';
+
+import { PostDto } from '../../dtos/PostDto';
+import { ActivityIndicator } from 'react-native';
 
 export function Home() {
+    const [feed, setFeed] = useState<PostDto[]>([] as PostDto[])
+    const [Loading, setLoading] = useState<boolean>(true);
+
     const theme = useTheme();
+
+    useEffect(() => {
+        async function loadData() {
+            try{
+                const feed = await api.get("/feed");
+                if(feed) {
+                    setFeed(feed.data);
+                }
+            }
+            catch(error) {
+                console.log(error)
+            }
+            finally {
+                setLoading(false);
+            }
+        }
+
+        loadData();
+    }, []);
+
 
     return (
         <Container>
@@ -52,12 +78,18 @@ export function Home() {
                     </ToolBar>
                 </HeaderWrapper>
             </Header>
-            <Content 
-                ListHeaderComponent={<Stories />}
-                data={[1,2,3,4,5]}
-                keyExtractor={(item, index) => `${index}`}
-                renderItem={() => <Post aspectRatio={0.834} />}
-            />
+            {
+                Loading ? 
+                    <ActivityIndicator color={theme.colors.text} size="large" />
+                :
+                <Content 
+                    ListHeaderComponent={<Stories />}
+                    data={feed}
+                    keyExtractor={(item, index) => item.id}
+                    renderItem={({ item }) => <Post data={item} />}
+                />
+            }
+           
                 
         </Container>
     );

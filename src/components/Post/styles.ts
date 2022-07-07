@@ -1,9 +1,16 @@
 import styled from 'styled-components/native';
 import Ionicons  from '@expo/vector-icons/Ionicons';
 import { RFValue } from 'react-native-responsive-fontsize';
+import { Dimensions, FlatList, FlatListProps } from 'react-native';
 
-interface ImgProps {
-    aspectRatio: number;
+interface IndexSize {
+    size: "normal" | "small" | "tiny"
+}
+
+const indexSizes = {
+    "normal": 6,
+    "small": 4,
+    "tiny": 3
 }
 
 export const Container = styled.View`
@@ -36,9 +43,22 @@ export const Name = styled.Text`
     font-size: ${RFValue(14)}px;
 `;
 
-export const Img = styled.ImageBackground<ImgProps>`
-    width: 100%;
-    aspect-ratio: ${({ aspectRatio }) => aspectRatio};
+export const Images = styled(
+    FlatList as new(props: FlatListProps<string>) => FlatList<string>
+).attrs({
+    showsHorizontalScrollIndicator: false,
+    horizontal: true,
+    style: {
+        flex: 1
+    }
+})`
+    flex: 1;
+`;
+
+export const Img = styled.Image`
+    width: ${Dimensions.get('window').width}px;
+    height: 0;
+    aspect-ratio: 0.834;
 `;
 
 export const Icons = styled(Ionicons)`
@@ -47,17 +67,38 @@ export const Icons = styled(Ionicons)`
 
 export const Actions = styled.View`
     flex-direction: row;
-    padding: 10px;
+    padding: 13px 10px;
 
     justify-content: space-between;
     align-items: center;
 `;
 
 export const ActionsLeft = styled.View`
-    width: 30%;
+    width: 33%;
     flex-direction: row;
     justify-content: space-between;
 `;
+
+export const IndexesImages = styled.View`
+    width: 33%;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+`;
+
+export const ImgIndex = styled.View<IndexSize>`
+    width: ${({ size }) => indexSizes[size]}px;
+    height: ${({ size }) => indexSizes[size]}px;
+    border-radius: ${({ size }) => indexSizes[size] / 2}px;
+    background-color: ${({ theme }) => theme.colors.text_time_post};
+    margin-right: 4px;
+`;
+
+export const ActionsRight = styled.View`
+    width: 33%;
+    align-items: flex-end;
+`;
+
 
 export const CommentsIcon = styled(Ionicons)`
     color: ${({ theme }) => theme.colors.text};
