@@ -28,35 +28,21 @@ import { Story } from '../Story';
 
 import { PostDto } from "../../dtos/PostDto";
 import { ViewToken } from 'react-native';
+import IndexesPost, { indexesPostAction }  from '../IndexesPost';
 
 interface PostProps {
     data: PostDto;
 }
 
-
-interface ChangeImageProps {
-    viewableItems: ViewToken[];
-    changed: ViewToken[];
-}
-
-
 export function Post({ data }: PostProps) {
 
-    function Index() {
-        const indexes = data.images.map((_, index) => {
-            let size : "normal" | "small" | "tiny" = "normal";
+    const indexesRef = useRef<indexesPostAction>(null);
 
-            if(index === 5) {
-                size = "small"
-            }
-
-            if(index >= 6) {
-                size = "tiny"
-            }
-            return <ImgIndex key={index} size={size} />
-        })
-
-        return <>{indexes}</>
+    function getCurrentImg(event) {
+        const index = event.contentOffset.x / event.layoutMeasurement.width
+        
+        
+        indexesRef.current.updateIndexes(index);
     }
 
     return (
@@ -78,6 +64,7 @@ export function Post({ data }: PostProps) {
                     source={{uri: item}} 
                 />}
                 pagingEnabled
+                onScroll={event => getCurrentImg(event.nativeEvent)}
             />
             <Actions>
                 <ActionsLeft>
@@ -87,7 +74,14 @@ export function Post({ data }: PostProps) {
                 </ActionsLeft>
                 <IndexesImages>
                     {
-                        data.images.length > 1 ? <Index /> : <></>
+                        data.images.length > 1 ? 
+                            <IndexesPost 
+                                amountOfIndex={data.images.length} 
+                                imgIndexVisible={0}
+                                ref={indexesRef}
+                            /> 
+                                : 
+                            <></>
                     }
                 </IndexesImages>
                 <ActionsRight>
