@@ -39,7 +39,7 @@ export function Post({ data }: PostProps) {
     const indexesRef = useRef<indexesPostAction>(null);
 
     function getCurrentImg(event) {
-        const index = event.contentOffset.x / event.layoutMeasurement.width
+        const index = Math.round(event.contentOffset.x / event.layoutMeasurement.width);
         
         
         indexesRef.current.updateIndexes(index);

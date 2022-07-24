@@ -1,5 +1,5 @@
 import styled from 'styled-components/native';
-import { indexTypesize } from '.';
+import { indexTypeSize } from '.';
 
 const indexSizes = {
     "normal": 6,
@@ -9,7 +9,7 @@ const indexSizes = {
 }
 
 interface IndexSize {
-    size: indexTypesize;
+    size: indexTypeSize;
     active: boolean;
 }
 

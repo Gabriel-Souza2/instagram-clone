@@ -1,6 +1,5 @@
-import React, { forwardRef, useImperativeHandle, useState } from 'react';
-import { Text } from 'react-native';
-import { IndexPost, indexTypesize } from '../IndexPost';
+import React, { forwardRef, useImperativeHandle, useRef, useState } from 'react';
+import IndexPost, { indexTypeSize, IndexActions } from '../IndexPost';
 
 import {
     Container
@@ -21,10 +20,29 @@ function IndexesPost({ amountOfIndex, imgIndexVisible }: IndexesPostProps, ref) 
     const [endRangeIndex, setEndRangeIndex] = useState<number>(4);
     const [currentIndex, setCurrentIndex] = useState<number>(imgIndexVisible);
 
+    const indexesRef = useRef([]);
+
     const qtdIndex = new Array(amountOfIndex).fill(0);
 
     function updateIndexes(index) {
+        if(index > currentIndex && index > endRangeIndex) {
+            setStartRangeIndex(startRangeIndex + 1);
+            setEndRangeIndex(index);
+        }
+
+        if(index < currentIndex && index < startRangeIndex) {
+            setStartRangeIndex(index);
+            setEndRangeIndex(endRangeIndex - 1)
+        }
+
+        updateSizeIndexes();
         setCurrentIndex(index);
+    }
+
+    function updateSizeIndexes() {
+        indexesRef.current.forEach((ref, index) => {
+            ref.changeSize(getSize(index));
+        });
     }
 
     useImperativeHandle(ref, () => {
@@ -33,7 +51,7 @@ function IndexesPost({ amountOfIndex, imgIndexVisible }: IndexesPostProps, ref) 
         }
     });
 
-    function getSize(index: number) : indexTypesize {
+    function getSize(index: number) : indexTypeSize {
         if(index >= startRangeIndex && index <=endRangeIndex) {
             return "normal"
         }
@@ -54,7 +72,14 @@ function IndexesPost({ amountOfIndex, imgIndexVisible }: IndexesPostProps, ref) 
         <Container>
             {
                 qtdIndex.map((_, index) => {
-                    return <IndexPost  key={index} size={getSize(index)} active={currentIndex === index}/>
+                    let size = getSize(index);
+                    
+                    return <IndexPost  
+                            key={index} 
+                            size={getSize(index)} 
+                            active={currentIndex === index}
+                            ref={el => indexesRef.current[index] = el}
+                        />
                 })
             }
         </Container>
