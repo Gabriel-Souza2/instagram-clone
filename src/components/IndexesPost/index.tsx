@@ -11,14 +11,13 @@ export interface indexesPostAction {
 
 interface IndexesPostProps {
     amountOfIndex: number;
-    imgIndexVisible: number;
 }
 
-function IndexesPost({ amountOfIndex, imgIndexVisible }: IndexesPostProps, ref) {
+function IndexesPost({ amountOfIndex }: IndexesPostProps, ref) {
 
     const [startRangeIndex, setStartRangeIndex] = useState<number>(0);
     const [endRangeIndex, setEndRangeIndex] = useState<number>(4);
-    const [currentIndex, setCurrentIndex] = useState<number>(imgIndexVisible);
+    const [currentIndex, setCurrentIndex] = useState<number>(0);
 
     const indexesRef = useRef([]);
 

@@ -3,16 +3,6 @@ import Ionicons  from '@expo/vector-icons/Ionicons';
 import { RFValue } from 'react-native-responsive-fontsize';
 import { Dimensions, FlatList, FlatListProps } from 'react-native';
 
-interface IndexSize {
-    size: "normal" | "small" | "tiny"
-}
-
-const indexSizes = {
-    "normal": 6,
-    "small": 4,
-    "tiny": 3
-}
-
 export const Container = styled.View`
     flex: 1;
     width: 100%;
@@ -55,10 +45,18 @@ export const Images = styled(
     flex: 1;
 `;
 
+export const ImagesWrapper = styled.View`
+    width: ${Dimensions.get('window').width}px;
+    aspect-ratio: 0.834;
+`;
+
+export const LikeWrapper = styled.View`
+
+`
+
 export const Img = styled.Image`
     width: ${Dimensions.get('window').width}px;
-    height: 0;
-    aspect-ratio: 0.834;
+    height: 100%;
 `;
 
 export const Icons = styled(Ionicons)`
@@ -86,13 +84,6 @@ export const IndexesImages = styled.View`
     align-items: center;
 `;
 
-export const ImgIndex = styled.View<IndexSize>`
-    width: ${({ size }) => indexSizes[size]}px;
-    height: ${({ size }) => indexSizes[size]}px;
-    border-radius: ${({ size }) => indexSizes[size] / 2}px;
-    background-color: ${({ theme }) => theme.colors.text_time_post};
-    margin-right: 4px;
-`;
 
 export const ActionsRight = styled.View`
     width: 33%;

@@ -11,7 +11,7 @@ import {
     Actions,
     CommentsIcon,
     ActionsLeft,
-    ImgIndex,
+    ImagesWrapper,
     ActionsRight,
     Likes,
     Message,
@@ -27,8 +27,10 @@ import {
 import { Story } from '../Story';
 
 import { PostDto } from "../../dtos/PostDto";
-import { ViewToken } from 'react-native';
 import IndexesPost, { indexesPostAction }  from '../IndexesPost';
+import Like, { LikeAction } from '../Like';
+import { Gesture, GestureDetector } from 'react-native-gesture-handler';
+import { runOnJS } from 'react-native-reanimated';
 
 interface PostProps {
     data: PostDto;
@@ -37,10 +39,21 @@ interface PostProps {
 export function Post({ data }: PostProps) {
 
     const indexesRef = useRef<indexesPostAction>(null);
+    const likeRef = useRef<LikeAction>();
+
+    const doubleTap = Gesture.Tap().numberOfTaps(2).onEnd((_event, success) => {
+        'Worklet';
+        if(success) {
+            runOnJS(likeAction)();
+        }
+    })
+
+    function likeAction() {
+        likeRef.current.startAnimate();
+    }
 
     function getCurrentImg(event) {
         const index = Math.round(event.contentOffset.x / event.layoutMeasurement.width);
-        
         
         indexesRef.current.updateIndexes(index);
     }
@@ -57,15 +70,21 @@ export function Post({ data }: PostProps) {
                 </AvatarWrapper>
                 <Icons name="md-ellipsis-vertical" size={24}/>
             </Header>
-            <Images 
-                data={data.images}
-                keyExtractor={(_,index) => `${data.authorId}-${index}`}
-                renderItem={({ item }) => <Img 
-                    source={{uri: item}} 
-                />}
-                pagingEnabled
-                onScroll={event => getCurrentImg(event.nativeEvent)}
-            />
+            <ImagesWrapper>
+                <GestureDetector gesture={doubleTap}> 
+                    <Images 
+                        data={data.images}
+                        keyExtractor={(_,index) => `${data.authorId}-${index}`}
+                        renderItem={({ item }) => <Img 
+                            source={{uri: item}} 
+                        />}
+                        pagingEnabled
+                        onScroll={event => getCurrentImg(event.nativeEvent)}
+                    />
+                </GestureDetector>
+                <Like ref={likeRef} />
+            </ImagesWrapper>
+
             <Actions>
                 <ActionsLeft>
                     <Icons name="ios-heart-outline" size={24}/>
@@ -77,7 +96,6 @@ export function Post({ data }: PostProps) {
                         data.images.length > 1 ? 
                             <IndexesPost 
                                 amountOfIndex={data.images.length} 
-                                imgIndexVisible={0}
                                 ref={indexesRef}
                             /> 
                                 : 
