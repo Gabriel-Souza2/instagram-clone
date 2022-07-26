@@ -54,7 +54,9 @@ export function Post({ data }: PostProps) {
     })
 
     function handleLike() {
+        setLiked(true);
         likePostRef.current.startAnimate();
+        likeIconRef.current.startAnimate();
     }
 
     function getCurrentImg(event) {
