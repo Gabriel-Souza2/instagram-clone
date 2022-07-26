@@ -10,7 +10,12 @@ export interface LikeAction {
     startAnimate: () => void;
 }
 
-function Like(_, ref) {
+interface LikeProps {
+    size: number;
+    color: 'white' | 'red';
+    disapper?: boolean;
+}
+function Like({ size, color , disapper = false}: LikeProps, ref) {
     const theme = useTheme();
 
     const scale = useSharedValue(0);
@@ -24,7 +29,8 @@ function Like(_, ref) {
     function startAnimate() {
         scale.value = withSpring(1, {}, 
         (finished) => {
-            scale.value = withDelay(500, withSpring(0));
+            if(finished && disapper)
+            scale.value = withDelay(300, withSpring(0));
         });
     }
 
@@ -35,23 +41,16 @@ function Like(_, ref) {
     })
 
     return (
-        <Animated.View style={[style.container, likeAnimation]}>
-            <Ionicons name='heart' size={120} color={theme.colors.text}/>
+        <Animated.View style={[likeAnimation]}>
+            <Ionicons 
+            name='heart' 
+            size={size} 
+            color={
+                color === 'white' ? theme.colors.text : theme.colors.liked
+            }/>
         </Animated.View>
     );
 }
-
-const style = StyleSheet.create({
-    container: {
-        position: 'absolute',
-        top: 0,
-        right: 0,
-        left: 0,
-        bottom: 0,
-        justifyContent:'center',
-        alignItems: 'center',
-    }
-});
 
 export default forwardRef(Like);
 

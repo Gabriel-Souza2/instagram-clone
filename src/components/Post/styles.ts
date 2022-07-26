@@ -50,9 +50,6 @@ export const ImagesWrapper = styled.View`
     aspect-ratio: 0.834;
 `;
 
-export const LikeWrapper = styled.View`
-
-`
 
 export const Img = styled.Image`
     width: ${Dimensions.get('window').width}px;
@@ -101,8 +98,17 @@ export const Footer = styled.View`
 `;
 
 export const Likes = styled.View`
-
     flex-direction: row;
+`;
+
+export const LikePostWrapper = styled.View`
+    position: absolute;
+    top: 0;
+    right: 0;
+    left: 0;
+    bottom: 0;
+    justify-content: center;
+    align-items: center;
 `;
 
 export const Message = styled.Text`

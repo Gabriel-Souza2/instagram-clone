@@ -7,7 +7,8 @@ export default {
         text: '#fff',
         text_link_comments: '#808080',
         text_time_post: '#6e6e6e',
-        index_active: '#0095f6'
+        index_active: '#0095f6',
+        liked: '#ff0000'
     },
     
     fonts: {

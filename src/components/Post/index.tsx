@@ -22,7 +22,8 @@ import {
     Description,
     Comments,
     TimePost,
-    IndexesImages
+    IndexesImages,
+    LikePostWrapper
 } from './styles';
 import { Story } from '../Story';
 
@@ -38,18 +39,22 @@ interface PostProps {
 
 export function Post({ data }: PostProps) {
 
+    const [likedPost, setLikedPost] = useState<boolean>(false);
+    const [liked, setLiked] = useState<boolean>(false);
+
     const indexesRef = useRef<indexesPostAction>(null);
-    const likeRef = useRef<LikeAction>();
+    const likePostRef = useRef<LikeAction>();
+    const likeIconRef = useRef<LikeAction>();
 
     const doubleTap = Gesture.Tap().numberOfTaps(2).onEnd((_event, success) => {
         'Worklet';
         if(success) {
-            runOnJS(likeAction)();
+            runOnJS(handleLike)();
         }
     })
 
-    function likeAction() {
-        likeRef.current.startAnimate();
+    function handleLike() {
+        likePostRef.current.startAnimate();
     }
 
     function getCurrentImg(event) {
@@ -82,12 +87,20 @@ export function Post({ data }: PostProps) {
                         onScroll={event => getCurrentImg(event.nativeEvent)}
                     />
                 </GestureDetector>
-                <Like ref={likeRef} />
+                <LikePostWrapper>
+                    <Like ref={likePostRef} size={100} color="white" disapper={true}/>
+                </LikePostWrapper>
             </ImagesWrapper>
 
             <Actions>
                 <ActionsLeft>
-                    <Icons name="ios-heart-outline" size={24}/>
+                    {
+                       liked ?
+                        <Like ref={likeIconRef} size={24} color='red' />
+                        : 
+                        <Icons name="ios-heart-outline" size={24}/>
+                    
+                    }
                     <CommentsIcon name="ios-chatbubble-outline" size={24}/>
                     <Icons name="send-outline" size={24} />
                 </ActionsLeft>
