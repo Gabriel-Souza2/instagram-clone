@@ -1,5 +1,9 @@
 import React, { useRef, useState } from 'react';
 
+import { Gesture, GestureDetector } from 'react-native-gesture-handler';
+import { runOnJS } from 'react-native-reanimated';
+import { useNavigation } from '@react-navigation/native';
+
 import {
     Container,
     Header,
@@ -9,6 +13,8 @@ import {
     Images,
     Img,
     Actions,
+    LikeButton,
+    CommentsButton,
     CommentsIcon,
     ActionsLeft,
     ImagesWrapper,
@@ -29,9 +35,8 @@ import { Story } from '../Story';
 
 import { PostDto } from "../../dtos/PostDto";
 import IndexesPost, { indexesPostAction }  from '../IndexesPost';
-import Like, { LikeAction } from '../Like';
-import { Gesture, GestureDetector } from 'react-native-gesture-handler';
-import { runOnJS } from 'react-native-reanimated';
+import { Like } from '../Like';
+
 
 interface PostProps {
     data: PostDto;
@@ -39,12 +44,12 @@ interface PostProps {
 
 export function Post({ data }: PostProps) {
 
+    const navigation = useNavigation();
+
+    const [likedButton, setLikedButton] = useState<boolean>(false);
     const [likedPost, setLikedPost] = useState<boolean>(false);
-    const [liked, setLiked] = useState<boolean>(false);
 
     const indexesRef = useRef<indexesPostAction>(null);
-    const likePostRef = useRef<LikeAction>();
-    const likeIconRef = useRef<LikeAction>();
 
     const doubleTap = Gesture.Tap().numberOfTaps(2).onEnd((_event, success) => {
         'Worklet';
@@ -54,15 +59,29 @@ export function Post({ data }: PostProps) {
     })
 
     function handleLike() {
-        setLiked(true);
-        likePostRef.current.startAnimate();
-        likeIconRef.current.startAnimate();
+        setLikedButton(false);
+
+        setLikedButton(true);
+        setLikedPost(true);
+    }
+
+    function finishAnimateLikedPost() {
+        setLikedPost(false);
     }
 
     function getCurrentImg(event) {
         const index = Math.round(event.contentOffset.x / event.layoutMeasurement.width);
         
         indexesRef.current.updateIndexes(index);
+    }
+
+    function handleLikeButton() {
+        setLikedButton(!likedButton);
+    }
+
+
+    function handleComments() {
+        navigation.navigate('Comments');
     }
 
     return (
@@ -90,20 +109,37 @@ export function Post({ data }: PostProps) {
                     />
                 </GestureDetector>
                 <LikePostWrapper>
-                    <Like ref={likePostRef} size={100} color="white" disapper={true}/>
+                    {
+                       likedPost ? 
+                            <Like 
+                                size={100} 
+                                color="white" 
+                                disapper={true}
+                                finishAnimateCallback={finishAnimateLikedPost}
+                            /> 
+                        : 
+                            <></>
+                    }
                 </LikePostWrapper>
             </ImagesWrapper>
 
             <Actions>
                 <ActionsLeft>
-                    {
-                       liked ?
-                        <Like ref={likeIconRef} size={24} color='red' />
-                        : 
-                        <Icons name="ios-heart-outline" size={24}/>
+                    <LikeButton onPress={handleLikeButton}>
                     
-                    }
-                    <CommentsIcon name="ios-chatbubble-outline" size={24}/>
+                        {
+                        likedButton ?
+                                <Like  size={24} color='red' />
+                                :
+                                <Icons name="ios-heart-outline" size={24}/>
+                            
+                        }
+                    </LikeButton>
+
+                    
+                    <CommentsButton onPress={handleComments}>
+                        <CommentsIcon name="ios-chatbubble-outline" size={24}/>
+                    </CommentsButton>
                     <Icons name="send-outline" size={24} />
                 </ActionsLeft>
                 <IndexesImages>

@@ -2,6 +2,7 @@ import styled from 'styled-components/native';
 import Ionicons  from '@expo/vector-icons/Ionicons';
 import { RFValue } from 'react-native-responsive-fontsize';
 import { Dimensions, FlatList, FlatListProps } from 'react-native';
+import { BorderlessButton } from 'react-native-gesture-handler';
 
 export const Container = styled.View`
     flex: 1;
@@ -87,6 +88,9 @@ export const ActionsRight = styled.View`
     align-items: flex-end;
 `;
 
+export const LikeButton = styled(BorderlessButton)``;
+
+export const CommentsButton = styled(BorderlessButton)``;
 
 export const CommentsIcon = styled(Ionicons)`
     color: ${({ theme }) => theme.colors.text};
